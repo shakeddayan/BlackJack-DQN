@@ -22,17 +22,24 @@ By decoupling these logic paths, the agent can achieve a higher degree of accura
 ## ⚙️ Installation & Setup
 
 1. **Clone the repository:**
+```bash
 git clone [https://github.com/shakeddayan/BlackJack-DQN.git](https://github.com/YourUsername/Blackjack-DQN.git)
 cd Blackjack-DQN
+```
 
 2. **Install dependencies:**
 It is recommended to use a virtual environment, but you can install the required libraries directly using:
 
+```bash
 pip install -r requirements.txt
+```
+
 
 3. **Run the project**:
 
+```bash
 python launcher.py
+```
 
 ## 📁 Project Structure
 
