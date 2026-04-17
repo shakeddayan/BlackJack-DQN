@@ -1,0 +1,10 @@
+# Core Game & UI
+pygame==2.6.1
+
+# AI & Reinforcement Learning
+torch==2.5.1
+wandb==0.24.0
+
+# Math & Arrays
+numpy==2.0.1
+matplotlib==3.9.1
