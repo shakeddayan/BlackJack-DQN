@@ -23,7 +23,7 @@ By decoupling these logic paths, the agent can achieve a higher degree of accura
 
 1. **Clone the repository:**
 ```bash
-git clone [https://github.com/shakeddayan/BlackJack-DQN.git](https://github.com/YourUsername/Blackjack-DQN.git)
+git clone https://github.com/shakeddayan/BlackJack-DQN.git
 cd Blackjack-DQN
 ```
 
