@@ -1,0 +1,19 @@
+#hide the system stuff
+__pycache__/
+.vscode/
+wandb/
+
+#hide irrelevant files
+abandoned
+split_out.txt
+split_out1.txt
+split_out2.txt
+split_out3.txt
+strat_min5_split0.txt
+strat_min6_split1.txt
+strat_min7_split2.txt
+strat_min9_split3.txt
+strat_min10_split4.txt
+text.txt
+TODO
+Trainer_DDQN_min_old.py

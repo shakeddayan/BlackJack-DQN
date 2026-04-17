@@ -1,0 +1,10 @@
+1. infinite money pool for AI. help it learn by simplifying the bet.
+2. no need to decide on bet. run the game and reward by game wins and not by balance.
+3. no split until later - may cause probems, check it out after.
+4. check if "masking" is needed for the NN
+5. check max win rate
+6. state build:
+    sum, isAce, canSplit, dealer (no split)
+    sum1, isAce1, canSplit, sum2, isAce2, dealer, handPlaying.
+
+7. check replay buffer - add every move or only at endgame?
