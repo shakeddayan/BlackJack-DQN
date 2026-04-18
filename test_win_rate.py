@@ -8,7 +8,7 @@ def main():
     print("\n--- STARTING TEST PHASE ---")
 
     min_parametes_path = 'checkpoints/BlackJack-min-run-14.pth'
-    split_parametes_path='checkpoints-split/BlackJack-split-run-10 (min model number 14).pth'
+    split_parametes_path='checkpoints-split/BlackJack-split-run-11 (min model number 14).pth'
     agent = DQN_Agent(min_parametes_path, split_parametes_path, train=False)
     # agent = Random_Agent()
     env = Env(balance=10000)

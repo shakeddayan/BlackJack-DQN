@@ -13,7 +13,7 @@ def main():
     '''
     
     MIN_MODEL_NUM = 14 #the min model number
-    SPLIT_MODEL_NUMS = (10, 14) #the split model number, and what min model was it created for.
+    SPLIT_MODEL_NUMS = (11, 14) #the split model number, and what min model was it created for.
 
     min_parametes_path=f'checkpoints/BlackJack-min-run-{MIN_MODEL_NUM}.pth'
     split_parametes_path=f'checkpoints-split/BlackJack-split-run-{SPLIT_MODEL_NUMS[0]} (min model number {SPLIT_MODEL_NUMS[1]}).pth'
