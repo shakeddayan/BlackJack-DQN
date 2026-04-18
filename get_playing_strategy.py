@@ -11,9 +11,9 @@ def main():
     '''
     will create a table with the playing strategy of a min model and his split agent.
     '''
-    WITH_SPLIT = False
+    
     MIN_MODEL_NUM = 14 #the min model number
-    SPLIT_MODEL_NUMS = (8, 14) #the split model number, and what min model was it created for.
+    SPLIT_MODEL_NUMS = (9, 14) #the split model number, and what min model was it created for.
 
     min_parametes_path=f'checkpoints/BlackJack-min-run-{MIN_MODEL_NUM}.pth'
     split_parametes_path=f'checkpoints-split/BlackJack-split-run-{SPLIT_MODEL_NUMS[0]} (min model number {SPLIT_MODEL_NUMS[1]}).pth'

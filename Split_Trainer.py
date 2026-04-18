@@ -44,7 +44,7 @@ def main():
     
     # --- WandB Configuration ---
     # Define hyperparameters for tracking
-    RUN_NUM = 8
+    RUN_NUM = 9
     FOR_MIN_MODEL_NUM = 14
     RUN_NAME = f"BlackJack-split-run-{RUN_NUM} (min model number {FOR_MIN_MODEL_NUM})" #the run name
     RESUME_TRAINING = False #is resuming another already saved run?
@@ -60,7 +60,7 @@ def main():
         "calc_win_from": 10000, # Log frequency
         "buffer_size": 50000,
         "gamma": 0.99, 
-        "start_balance": 1000000,
+        "start_balance": 10000,
         "epsilon_decay": 500000,
         "min_model_num": FOR_MIN_MODEL_NUM
     }
@@ -177,20 +177,27 @@ def main():
             #update counters
             # if action == 1:
             #     has_doubled = True
+            
+            #put the values into variables for simplicty and readability.
+            pair_val = env.state.p_hand_vals[1] #take the second card, in case of aces the first will be 1.
+            d_card = env.state.d_card #get the dealer open card.
+            
             if action == 2:
                 splits += 1
                 overall += 1
-                if 11 in env.state.p_hand_vals or 8 in env.state.p_hand_vals:
+                if pair_val == 11 or pair_val == 8:
                     reward += 3 #was 0.5 until training 8
-                if 10 in env.state.p_hand_vals or 5 in env.state.p_hand_vals:
+                if pair_val == 10 or pair_val == 5:
                     reward -= 3
-                if (6 in env.state.p_hand_vals or 7 in env.state.p_hand_vals) and env.state.d_card >= 8:
-                    reward -= -3 #new condition from training 8.
-                if 9 in env.state.p_hand_vals and env.state.d_card >= 10:
-                    reward -= -3 #new condition from training 8.
+                if (pair_val == 6 or pair_val == 7) and d_card >= 8:
+                    reward -= 3 #new condition from training 8. was -3 by mistake (double minus). from 9 and up it is 3.
+                if pair_val == 9 and (d_card == 7 or d_card >= 10): #added the d_card == 7 on training 9
+                    reward -= 3 #new condition from training 8. was -3 by mistake (double minus). from 9 and up it is 3.
             else:
-                if 5 in env.state.p_hand_vals:
+                if pair_val == 5 or pair_val == 10: #was only for 5 up until training 8. 9+ -> 5&10
                     reward += 0.5
+                if pair_val == 8 or pair_val == 11:
+                    reward -= 2 #new condition from training 9
 
             env.move(action, G=None)
             # print('env moved - line 177')
@@ -329,7 +336,10 @@ def main():
     for epoch in range(test_epoches):
         if terminate_game:
             break
-            
+        
+        #restart a new game.
+        env.start(force_split=True) #added here because on surrender the game would just get stuck on a terminal losing state. will take effect from run 10+.
+        
         done = False
         while not done:
             curr_state = env.state.get_state_split()
