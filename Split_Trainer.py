@@ -44,7 +44,7 @@ def main():
     
     # --- WandB Configuration ---
     # Define hyperparameters for tracking
-    RUN_NUM = 9
+    RUN_NUM = 10
     FOR_MIN_MODEL_NUM = 14
     RUN_NAME = f"BlackJack-split-run-{RUN_NUM} (min model number {FOR_MIN_MODEL_NUM})" #the run name
     RESUME_TRAINING = False #is resuming another already saved run?
@@ -185,19 +185,33 @@ def main():
             if action == 2:
                 splits += 1
                 overall += 1
+                
+                #run 10 - increased most rewards from 3s to 5s.
                 if pair_val == 11 or pair_val == 8:
-                    reward += 3 #was 0.5 until training 8
-                if pair_val == 10 or pair_val == 5:
-                    reward -= 3
-                if (pair_val == 6 or pair_val == 7) and d_card >= 8:
-                    reward -= 3 #new condition from training 8. was -3 by mistake (double minus). from 9 and up it is 3.
-                if pair_val == 9 and (d_card == 7 or d_card >= 10): #added the d_card == 7 on training 9
-                    reward -= 3 #new condition from training 8. was -3 by mistake (double minus). from 9 and up it is 3.
+                    reward += 3
+                elif pair_val == 10 or pair_val == 5:
+                    reward -= 5
+                elif pair_val in [6, 7] and d_card >= 8:
+                    reward -= 5
+                elif pair_val == 9 and d_card in [7, 10, 11]:
+                    reward -= 5
+                #new for run 10
+                elif pair_val == 2 and d_card in [8,9]:
+                    reward -= 5
             else:
-                if pair_val == 5 or pair_val == 10: #was only for 5 up until training 8. 9+ -> 5&10
-                    reward += 0.5
-                if pair_val == 8 or pair_val == 11:
-                    reward -= 2 #new condition from training 9
+                if pair_val == 5 or pair_val == 10:
+                    reward += 2 #increased to 2
+                elif pair_val == 8 or pair_val == 11:
+                    reward -= 5
+                #new
+                elif pair_val == 9 and d_card == 2:
+                    reward -= 5
+                elif pair_val in [6,7] and d_card >= 8:
+                    reward += 2
+                elif pair_val == 9 and d_card in [7, 10, 11]:
+                    reward += 2
+                elif pair_val == 2 and d_card in [8, 9]:
+                    reward += 2
 
             env.move(action, G=None)
             # print('env moved - line 177')
@@ -328,6 +342,7 @@ def main():
     test_epoches = 100000
     test_win = 0
     extra_hands = 0 #how many hands were created by a split, to not cheat the win rate.
+    env.state.balance = 10000 #prevent integer overflow.
     
     env.start(force_split=True)
     splitter.train = False
