@@ -354,8 +354,8 @@ class Env:
         gets a numpy array that shows which actions are legal in the current state. (0 = not legal, 1 = legal)
         '''
 
-        actions = np.zeros(15, dtype=np.int32)
-        for i in range(15):
+        actions = np.zeros(17, dtype=np.int32)
+        for i in range(len(actions)): #CHANGED: didn't reference action 15(all in) & 16(bet 10$).
             if self.is_action_legal(i):
                 actions[i] = 1
         return actions
@@ -413,7 +413,7 @@ class Env:
         
         return self.get_d_sum() == 21 and card_amount == 2
 
-    def Dplay(self, G:Graphics):
+    def Dplay(self, G:Graphics = None): # CHANGED: made sure G can be None
         '''
         make the dealer play.
         the dealer is automatic - hits until he has a total sum of 17, then stops.
@@ -519,7 +519,7 @@ class Env:
 
         #if dealer hasn't played yet, make the dealer play before evaluating result
         if not self.Dplayed:
-            self.Dplay() #dealer plays until at least 17 or busts
+            self.Dplay(G) #dealer plays until at least 17 or busts
             #recalculate the results after dealer finished
             main_hand_result = self.check_hand_result(True)
             second_hand_result = self.check_hand_result(False) if self.splitted else 4

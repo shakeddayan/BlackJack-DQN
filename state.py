@@ -117,7 +117,7 @@ class State:
         # While the total is >21 and there's still an 11 (ace), convert one 11 to 1
         while total > 21 and 11 in self.p2_hand_vals:
             # Find the first 11 and convert it to 1
-            for i in range(len(self.p_hand_vals)):
+            for i in range(len(self.p2_hand_vals)): #CHANGED: was len(self.p_hand_vals) instead of second hand.
                 if self.p2_hand_vals[i] == 11:
                     self.p2_hand_vals[i] = 1
                     break

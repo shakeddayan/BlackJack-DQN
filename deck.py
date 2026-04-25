@@ -36,7 +36,7 @@ class Deck:
         '''
         tens = ['jack', 'queen', 'king']
         for card in self.cards:
-            if card.value == value or (card.value in tens and value == 10) or (card.value == 'ace' and value == 11 or value == 1):
+            if card.value == value or (card.value in tens and value == 10) or (card.value == 'ace' and (value == 11 or value == 1)): #CHANGED: condition was wrong. added ().
                 self.cards.remove(card)
                 return card
         return None
