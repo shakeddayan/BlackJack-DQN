@@ -466,7 +466,7 @@ class Env:
         
         return 1 if pBJ else 2 #if someone has a BJ, he is the winner
 
-    def update_end_game(self, is_main_hand:int, result :int):
+    def update_end_game(self, is_main_hand:bool, result :int):
         '''
         updates the balance according to the game results
         '''

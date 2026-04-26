@@ -17,3 +17,4 @@ strat_min10_split4.txt
 text.txt
 TODO
 Trainer_DDQN_min_old.py
+TrainerDDQN.py
