@@ -134,6 +134,9 @@ def main():
             # A
             action = player.get_Action(curr_state, epoch,start_epoch= start_epoch) if env.state.round_phase == 'playing' else 5 if epoch < epoches - 50000 else 6 
             
+            p_sum = env.state.get_p_sum() #save these for the reward in case of a state override (for example, surrender)
+            d_card_val = env.state.d_card
+            
             # S'
             env.move(action, G=None)
             if action == 5 or action == 6:
@@ -143,48 +146,31 @@ def main():
             # R
             reward = 0
             check_end_status = 0
-            p_sum = env.state.get_p_sum() #to give reward for actions
 
-            # Handle Surrender reward
-            if action == 4:
-                reward -= 0.5
-                done = True
-                surrenders += 1
-                overall += 1
-                if p_sum >= 17:
-                    reward -= 0.25
-                elif p_sum == 16:
-                    reward += 0.1
-                elif p_sum in [15,16] and env.state.d_card >= 9:
-                    reward += 1.2
-                elif p_sum <= 15: #added the =
-                    reward -= 2
-                    if p_sum == 14: #new
-                        reward -= 2
             #update counters & give reward for actions on specific circumstances.
+            # Handle Hit reward
             if action == 0:
                 hits += 1
                 overall+=1
                 if p_sum < 12:
                     reward += 0.15
-                if p_sum == 12 and env.state.d_card <= 3: #new
+                if p_sum == 12 and d_card_val <= 3: #new
                     reward += 0.5
-                if p_sum >= 12 and p_sum <= 16 and env.state.d_card >= 7:
+                if p_sum >= 12 and p_sum <= 16 and d_card_val >= 7:
                     reward += 1# old - 0.3
                 if p_sum >= 17 and 11 not in env.state.p_hand_vals: #punish on hard 17+
                     reward -= 1.5
-                # elif p_sum in [17, 18] and 11 in env.state.p_hand_vals: #maybe wrong
-                #     reward += 0.3
                 elif p_sum >= 19 and 11 in env.state.p_hand_vals: #punish on soft 19+
                     reward -= 1
                 
+            # Handle Double reward
             if action == 1:
                 doubles += 1
                 overall += 1
                 has_doubled = True
                 if p_sum < 12:
                     reward += 0.1
-                if p_sum == 11 or (p_sum == 10 and env.state.d_card < 10):
+                if p_sum == 11 or (p_sum == 10 and d_card_val < 10):
                     reward += 1.5 #was 0.3
                 elif p_sum >= 17 and 11 not in env.state.p_hand_vals: #punish on hard 17+
                     reward -= 1.5
@@ -192,24 +178,44 @@ def main():
                     reward += 1 #was 0.3
                 elif p_sum>= 19 and 11 in env.state.p_hand_vals: #punish on soft 19+
                     reward -= 1
-                if 13 <= p_sum <= 18 and 3 <= env.state.d_card <= 6 and 11 in env.state.p_hand_vals:
+                if 13 <= p_sum <= 18 and 3 <= d_card_val <= 6 and 11 in env.state.p_hand_vals:
                     reward += 0.2
-                if 13 <= p_sum <= 15 and 2 <= env.state.d_card <= 3 and 11 in env.state.p_hand_vals: #new
+                if 13 <= p_sum <= 15 and 2 <= d_card_val <= 3 and 11 in env.state.p_hand_vals: #new
                     reward -= 0.2
                 
+            # Handle Split - won't happen (masked, this is Split_Agent job)
             if action == 2:
                 splits += 1
                 overall += 1
                 
+            # Handle Stand reward
             if action == 3:
                 stands += 1
                 overall += 1
                 if p_sum < 12 or (p_sum < 18 and 11 in env.state.p_hand_vals):
                     reward -= 2
-                if p_sum == 18 and 11 in env.state.p_hand_vals and (env.state.d_card >= 9 or env.state.d_card <= 6): #added the <= 6
-                    reward -= 2 #was 0.5
-                if p_sum >= 12 and p_sum <= 16 and env.state.d_card >= 7:
-                    reward -= 1.5 #added .5
+                if p_sum == 18 and 11 in env.state.p_hand_vals and (d_card_val >= 9 or d_card_val <= 6): #added the <= 6
+                    reward -= 2 
+                if p_sum >= 12 and p_sum <= 16 and d_card_val >= 7:
+                    reward -= 1.5
+            
+            # Handle Surrender reward
+            if action == 4:
+                reward -= 0.5
+                done = True
+                surrenders += 1
+                overall += 1
+                
+                if p_sum >= 17:
+                    reward -= 0.25
+                elif p_sum == 16:
+                    reward += 0.1
+                elif p_sum in [15,16] and d_card_val >= 9:
+                    reward += 1.2
+                elif p_sum <= 15: 
+                    reward -= 2
+                    if p_sum == 14:
+                        reward -= 2
 
 
             # Check if the game ended

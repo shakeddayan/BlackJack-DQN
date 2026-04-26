@@ -217,6 +217,9 @@ def main():
             if action == 4:
                 done = True
                 reward -= 0.5 #punish on surrender and finish epoch, so won't corrupt Q value.
+                # Update totals
+                totalR += reward
+                episode_reward += reward 
                 continue
 
             # Check if the game ended
@@ -252,7 +255,7 @@ def main():
             
             
         if save_state: #save to buffer the decision and game reward.
-            buffer.push_split(saved_split_state, torch.tensor([saved_decision]), torch.tensor([reward], dtype=torch.float32))
+            buffer.push_split(saved_split_state, torch.tensor([saved_decision]), torch.tensor([episode_reward], dtype=torch.float32)) #push episode reward so will learn based on the min agent
             
         
         # Accumulate reward for logging
