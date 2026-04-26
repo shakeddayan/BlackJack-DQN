@@ -125,29 +125,21 @@ def main():
 
     # LOOP
     for epoch in range(start_epoch, epoches):
+        #new game start
         if terminate_game:
             print("Game terminated by user.")
             break 
-        # print('epoch start - line 131')
+        
         done = False
         episode_reward = 0 
         save_state = False
-        # moves_made = 0
-        # action = None
         
         while not done:
-            # print('turn start - line 137')
+            #new move for the same game
             env.checkend = False
-            # moves_made += 1
-            # if moves_made > 50:
-                # print(f'CRITICAL: Infinite loop detected! Phase: {env.state.round_phase}, Action: {action}')
-                # print(env.state)
-                # print('d_hand_vals: ', env.d_hand_vals)
-                # break
             
             # S
             curr_state = env.state.get_state_split() #the state of the current playing hand.
-            # print('got state - line 142')
             
             # A
             action = None
@@ -166,17 +158,12 @@ def main():
             if action != 2: #else use min model selection if can't/didn't split (action will be None).
                 min_state = env.state.get_state_AI() #needs a different format
                 action = player.get_Action(min_state,has_split=env.splitted, epoch=epoch, start_epoch=start_epoch,train=False) if env.state.round_phase == 'playing' else 5 if epoch < epoches - 50000 else 6 
-            # print('got action - line 161')
-            # S'
             
 
             # R
             reward = 0
             check_end_status = 0
 
-            #update counters
-            # if action == 1:
-            #     has_doubled = True
             
             #put the values into variables for simplicty and readability.
             pair_val = env.state.p_hand_vals[1] #take the second card, in case of aces the first will be 1.
@@ -186,7 +173,7 @@ def main():
                 splits += 1
                 overall += 1
                 
-                #run 11 - added more conditions to target cases with small pair_val and high d_card.
+                #rewards - action specific
                 if pair_val == 11 or pair_val == 8:
                     reward += 3
                 elif pair_val == 10 or pair_val == 5:
@@ -226,32 +213,28 @@ def main():
                     reward -= 5
 
             env.move(action, G=None)
-            # print('env moved - line 177')
+            
+            if action == 4:
+                done = True
+                reward -= 0.5 #punish on surrender and finish epoch, so won't corrupt Q value.
+                continue
 
             # Check if the game ended
-            has_BJ = env.PCheckBJ()
-            
             if env.checkend:
-                # print('starting checkend - line 183')
                 check_end_status = env.CheckEnd(force_split=True)
-                # print('after checkend - line 185')
                 
                 if check_end_status == 0: #not finished.
-                    # print('not finished (continue) - line 188')
                     continue
                 
                 #if here, the game is done
-                # print('game is done - line 192')
                 done = True 
                 
                 # Calculate reward
                 reward += endgame_reward(check_end_status)
-                # print('reward calculated - line 197')
                 
                 # Count wins logic
                 if check_end_status in [1, 4, 5, 6, 8]: 
                     win += 1
-                    # print('adding win to counter - line 202')
                     current_win_count += 1 
                     if check_end_status == 1 and env.splitted:
                         win += 1
@@ -260,7 +243,6 @@ def main():
                 
             
             if action == 5 or action == 6:
-                # print('skipping betting - line 211')
                 continue
             
 
@@ -270,7 +252,6 @@ def main():
             
             
         if save_state: #save to buffer the decision and game reward.
-            # print('saving to buffer - line 221')
             buffer.push_split(saved_split_state, torch.tensor([saved_decision]), torch.tensor([reward], dtype=torch.float32))
             
         
@@ -278,9 +259,7 @@ def main():
         running_reward += episode_reward
 
         # --- TRAINING BLOCK ---
-        # print('starting training - line 229')
         if len(buffer) > batch_size and epoch % train_batch == 0:
-            # print('training - line 232')
             states, actions, rewards= buffer.sample_split(batch_size)
             
             Q_values = splitter.DQN(states)
@@ -290,11 +269,7 @@ def main():
             # every state is terminal, split only once. done = true always 
             # so the bellman equation is Q(s,a) = R
             # hence why there is no second network.
-            #
-            # with torch.no_grad():
-            #     Q_next = splitter_hat.DQN(next_states)
-            #     max_next_Q = torch.max(Q_next, dim=1, keepdim=True)[0]
-            #     Q_target = rewards + (0.99 * max_next_Q * (1 - dones))
+            
             
             loss = torch.nn.MSELoss()(Q_current, rewards)
             
@@ -309,7 +284,6 @@ def main():
 
         # --- WANDB LOGGING & PRINTING ---
         if epoch > 0 and epoch % calc_win_from == 0:
-            # print('logging to wandb - line 259')
             # Calculate averages
             avg_loss = running_loss / loss_count if loss_count > 0 else 0
             avg_reward = running_reward / calc_win_from
