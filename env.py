@@ -355,7 +355,7 @@ class Env:
         '''
 
         actions = np.zeros(17, dtype=np.int32)
-        for i in range(len(actions)): #CHANGED: didn't reference action 15(all in) & 16(bet 10$).
+        for i in range(len(actions)):
             if self.is_action_legal(i):
                 actions[i] = 1
         return actions
@@ -413,7 +413,7 @@ class Env:
         
         return self.get_d_sum() == 21 and card_amount == 2
 
-    def Dplay(self, G:Graphics = None): # CHANGED: made sure G can be None
+    def Dplay(self, G:Graphics = None):
         '''
         make the dealer play.
         the dealer is automatic - hits until he has a total sum of 17, then stops.

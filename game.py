@@ -19,7 +19,7 @@ def main(agent_type="human"):
     pygame.init()
 
     #RUN VARIABLES
-    FORCE_SPLIT = True
+    FORCE_SPLIT = False
     run = True
     balance = 10000
     graphics = Graphics(balance)
@@ -31,8 +31,8 @@ def main(agent_type="human"):
         agent = Random_Agent()
     elif agent_type == "dqn":
     # agent = DQN_Agent_min(parametes_path="checkpoints/BlackJack-min-run-5.pth", train=False)
-        agent = DQN_Agent(min_parametes_path="checkpoints/BlackJack-min-run-10.pth",
-                          split_parameters_path="checkpoints-split/BlackJack-split-run-5 (min model number 10).pth",
+        agent = DQN_Agent(min_parametes_path="checkpoints/BlackJack-min-run-14.pth",
+                          split_parameters_path="checkpoints-split/BlackJack-split-run-11 (min model number 14).pth",
                           train=False)
     
     last_move_time = pygame.time.get_ticks()
@@ -55,11 +55,9 @@ def main(agent_type="human"):
             if isinstance(agent, DQN_Agent):
                 action = agent.get_Action(env, train=False)
             else:
-                action = agent.get_Action(env.state.get_state_AI(), train=False) if env.state.round_phase == 'playing' else 6
+                action = agent.get_Action(env= env)
             env.move(action, graphics)
             last_move_time = current_time
-            # if action is not None:
-            #     print(action, 'bet = ' + str(env.state.bet_val))
 
         #render interactable objects
         graphics.render_screen(env)

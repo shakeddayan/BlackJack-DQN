@@ -22,7 +22,7 @@ class Deck:
     
     def get_card(self) -> Card:
         '''
-        get a random card from the deck (so no need to shuffle, card are random automatically) - CHANGED
+        get a random card from the deck
         the deck is shuffled, get a card and remove it from the deck.
         '''
         # card = random.choice(self.cards) #choose a random card
@@ -36,7 +36,7 @@ class Deck:
         '''
         tens = ['jack', 'queen', 'king']
         for card in self.cards:
-            if card.value == value or (card.value in tens and value == 10) or (card.value == 'ace' and (value == 11 or value == 1)): #CHANGED: condition was wrong. added ().
+            if card.value == value or (card.value in tens and value == 10) or (card.value == 'ace' and (value == 11 or value == 1)):
                 self.cards.remove(card)
                 return card
         return None
