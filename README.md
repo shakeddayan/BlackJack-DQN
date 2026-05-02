@@ -55,5 +55,9 @@ python launcher.py
 
 The agent observes the current game state - including the player's hand sum, whether or not the player's hand contains an ace(11/1) and the dealer's open card - and selects an action based on the combined policy of the Min and Split models. The rewards are calculated based on hand outcomes, reinforcing "Perfect Strategy" decisions over time.
 
+## 🤖 ​Current Best Agent
+DQN_Agent_min: 14
+Split_Agent: 11 (for min model 14)
+
 ---
 *Developed as part of a deep dive into Reinforcement Learning and Computer Science.*

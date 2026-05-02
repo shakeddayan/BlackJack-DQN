@@ -44,8 +44,8 @@ def main():
     
     # --- WandB Configuration ---
     # Define hyperparameters for tracking
-    RUN_NUM = 11
-    FOR_MIN_MODEL_NUM = 14
+    RUN_NUM = 12
+    FOR_MIN_MODEL_NUM = 15
     RUN_NAME = f"BlackJack-split-run-{RUN_NUM} (min model number {FOR_MIN_MODEL_NUM})" #the run name
     RESUME_TRAINING = False #is resuming another already saved run?
     PATH_TO_LOAD = "checkpoints-split/BlackJack-split-run-3 (min model number 9).pth" #path to load
@@ -152,66 +152,24 @@ def main():
                 #save the decision for the buffer.
                 saved_decision = decision
                 
+                #update counters
+                overall += 1
+                
                 if decision == 1: #if decided to split
                     action = 2 # action is split
+                    splits += 1
+                    
+                #R - will do it here so wont punish on min model playing
+                #action specific rewards
+                reward = 0
+                pair_val = env.state.p_hand_vals[1] #take the second card, in case of aces the first will be 1.
+                d_card = env.state.d_card #get the dealer open card.
+                reward += action_specific_reward(decision, pair_val, d_card)
                 
             if action != 2: #else use min model selection if can't/didn't split (action will be None).
                 min_state = env.state.get_state_AI() #needs a different format
                 action = player.get_Action(min_state,has_split=env.splitted, epoch=epoch, start_epoch=start_epoch,train=False) if env.state.round_phase == 'playing' else 5 if epoch < epoches - 50000 else 6 
             
-
-            # R
-            reward = 0
-            check_end_status = 0
-
-            
-            #put the values into variables for simplicty and readability.
-            pair_val = env.state.p_hand_vals[1] #take the second card, in case of aces the first will be 1.
-            d_card = env.state.d_card #get the dealer open card.
-            
-            if action == 2:
-                splits += 1
-                overall += 1
-                
-                #rewards - action specific
-                if pair_val == 11 or pair_val == 8:
-                    reward += 3
-                elif pair_val == 10 or pair_val == 5:
-                    reward -= 5
-                elif pair_val in [6, 7] and d_card >= 8:
-                    reward -= 5
-                elif pair_val == 9 and d_card in [7, 10, 11]:
-                    reward -= 5
-                elif pair_val == 2 and d_card in [8,9]:
-                    reward -= 5
-                #new - run 11
-                elif pair_val in [2, 3] and d_card >= 8:
-                    reward -= 5
-                elif pair_val == 4 and d_card not in [5, 6]:
-                    reward -= 5
-                elif pair_val == 4 and d_card in [5, 6]:
-                    reward += 5
-            else:
-                if pair_val == 5 or pair_val == 10:
-                    reward += 2
-                elif pair_val == 8 or pair_val == 11:
-                    reward -= 5
-                elif pair_val == 9 and d_card == 2:
-                    reward -= 5
-                elif pair_val in [6,7] and d_card >= 8:
-                    reward += 2
-                elif pair_val == 9 and d_card in [7, 10, 11]:
-                    reward += 2
-                elif pair_val == 2 and d_card in [8, 9]:
-                    reward += 2
-                    #new - run 11
-                elif pair_val in [2, 3] and d_card >= 8:
-                    reward += 2
-                elif pair_val == 4 and d_card not in [5, 6]:
-                    reward += 2
-                elif pair_val == 4 and d_card in [5, 6]:
-                    reward -= 5
-
             env.move(action, G=None)
             
             if action == 4:
@@ -408,6 +366,49 @@ def endgame_reward (check_end_status):
     
     return reward 
 
+def action_specific_reward(decision, pair_val, d_card):
+    reward = 0
+    
+    if decision == 1: #decided to split
+        if pair_val == 11 or pair_val == 8:
+            reward += 3
+        elif pair_val == 10 or pair_val == 5:
+            reward -= 5
+        elif pair_val in [6, 7] and d_card >= 8:
+            reward -= 5
+        elif pair_val == 9 and d_card in [7, 10, 11]:
+            reward -= 5
+        elif pair_val == 2 and d_card in [8,9]:
+            reward -= 5
+        #new - run 11
+        elif pair_val in [2, 3] and d_card >= 8:
+            reward -= 5
+        elif pair_val == 4 and d_card not in [5, 6]:
+            reward -= 5
+        elif pair_val == 4 and d_card in [5, 6]:
+            reward += 5
+    else: #decided not to split
+        if pair_val == 5 or pair_val == 10:
+            reward += 2
+        elif pair_val == 8 or pair_val == 11:
+            reward -= 5
+        elif pair_val == 9 and d_card == 2:
+            reward -= 5
+        elif pair_val in [6,7] and d_card >= 8:
+            reward += 2
+        elif pair_val == 9 and d_card in [7, 10, 11]:
+            reward += 2
+        elif pair_val == 2 and d_card in [8, 9]:
+            reward += 2
+            #new - run 11
+        elif pair_val in [2, 3] and d_card >= 8:
+            reward += 2
+        elif pair_val == 4 and d_card not in [5, 6]:
+            reward += 2
+        elif pair_val == 4 and d_card in [5, 6]:
+            reward -= 5
+        
+    return reward
 
 if __name__ == '__main__':
     main()

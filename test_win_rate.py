@@ -11,6 +11,7 @@ def main():
     split_parametes_path='checkpoints-split/BlackJack-split-run-11 (min model number 14).pth'
     agent = DQN_Agent(min_parametes_path, split_parametes_path, train=False)
     # agent = Random_Agent()
+    # agent = DQN_Agent()
     env = Env(balance=10000)
 
     test_epoches = 100000

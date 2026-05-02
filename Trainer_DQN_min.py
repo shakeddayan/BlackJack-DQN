@@ -32,7 +32,7 @@ def main():
     
     # --- WandB Configuration ---
     # Define hyperparameters for tracking
-    RUN_NUM = 14
+    RUN_NUM = 15
     RUN_NAME = f"BlackJack-min-run-{RUN_NUM}" #the run name
     RESUME_TRAINING = False #is resuming another already saved run?
     PATH_TO_LOAD = "checkpoints/BlackJack-min-run-9.pth" #path to load

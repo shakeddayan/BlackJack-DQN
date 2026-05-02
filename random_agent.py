@@ -8,7 +8,7 @@ class Random_Agent:
     '''
 
     #get an action and run it
-    def get_Action(self, env:Env = None):
+    def get_Action(self, env:Env = None, epoch=None, train=False):
         
         if env.state.round_phase == 'betting': #betting phase
             return random.randint(5, 16)
