@@ -35,7 +35,7 @@ class Env:
         self.state.round_phase = 'betting' #will hold the round phase: betting / playing, and will help lock buttons accordingly
         self.d_hand_vals = np.zeros(11, dtype=np.int32)
         self.splitted = False
-        self.state.get_bet(G.bet.get_value() if G != None else 0) #store the bet value in the state
+        self.state.set_bet(G.bet.get_value() if G != None else 0) #store the bet value in the state
     
     # def render_graphics(self, G:Graphics):
     #     #draw bet slider
@@ -58,7 +58,7 @@ class Env:
         self.Pplays = True #make it the players turn
         self.Dplayed = False #the dealer hasn't played yet
         self.state.round_phase = 'betting' #set the game state to betting
-        self.state.get_bet(0) #store the bet value in the state       G.bet.get_value() if G != None else
+        self.state.set_bet(0) #store the bet value in the state       G.bet.get_value() if G != None else
 
         if G != None:
             G.p_hand = [] #empty the list of graphic cards to print out
@@ -253,7 +253,7 @@ class Env:
         
     
         #make bets match
-        self.state.get_bet(self.state.bet_val)
+        self.state.set_bet(self.state.bet_val)
 
     def STAND(self, G:Graphics): 
         '''

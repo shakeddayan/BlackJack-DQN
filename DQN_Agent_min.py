@@ -8,21 +8,23 @@ from DQN import DQN
 epsilon_start, epsilon_final, epsilon_decay = 1, 0.01, 200000
 
 
-class DQN_Agent_min:
+class DQN_Agent_min: #THE MIN MODEL
     def __init__(self, parametes_path = None, train = True, env= None, device = torch.device('cpu')):
+        #counters for actions
         self.C0 = 0
         self.C1 = 0
         self.C2 = 0
         self.C3 = 0
         self.C4 = 0
         self.rando = 0
+        #the Neural network
         self.DQN = DQN(device=device)
         if parametes_path:
             self.DQN.load_params(parametes_path)
         self.train = train
         self.setTrainMode()
 
-    def setTrainMode (self):
+    def setTrainMode (self): #change train modes
         if self.train:
             self.DQN.train()
         else:
@@ -33,9 +35,10 @@ class DQN_Agent_min:
         if self.train and train:
             epsilon = self.epsilon_greedy(epoch - start_epoch)
             rnd = random.random()
-            if rnd < epsilon:
+            if rnd < epsilon: #epsilon greedy policy
                 self.rando += 1
                 randy =  random.choice(actions)
+                #update counters
                 if randy == 0:
                     self.C0 += 1
                 if randy == 1:
@@ -70,7 +73,7 @@ class DQN_Agent_min:
         return Q_values[rows, cols]
 
     def epsilon_greedy(self,epoch, start = epsilon_start, final=epsilon_final, decay=epsilon_decay):
-        return final + (start - final) * math.exp(-1 * epoch/decay)
+        return final + (start - final) * math.exp(-1 * epoch/decay) #exponential
         # if epoch < decay:
         #     return start - (start - final) * epoch/decay
         # return final

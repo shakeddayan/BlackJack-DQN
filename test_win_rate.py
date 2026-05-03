@@ -23,33 +23,25 @@ def main():
     env.start()
     
     for epoch in range(test_epoches):
-            
+        steps_count = 0 #will help catch problems and infinite loops
         done = False
         while not done:
-            curr_state = env.state.get_state_split()
             
-            # if env.state.round_phase == 'playing':
-            #     action = None
-            #     split_legal = env.is_action_legal(2)
-            #     if split_legal: #if can split.
-            #         # make a decision: 1-split, 0-do something else.
-            #         decision = agent.split_agent.get_Action(curr_state, epoch=epoch, train=False)
-            #         if decision == 1:
-            #             action = 2
-            #             extra_hands += 1
-                
-            #     if action != 2:
-            #         min_state = env.state.get_state_AI() #needs a different format
-            #         action = agent.min_agent.get_Action(min_state, has_split=env.splitted, train=False)
-            # else:
-            #     action = 6 
+            # debugging infinite loops
+            steps_count += 1
+            if steps_count > 100:
+                print("infinite loop. printing state\n", str(env.state))
+                env.start()
+                break
+            
+            #choose action
             action = agent.get_Action(env=env, epoch=epoch, train=False)
             if action == 2:
                 extra_hands += 1
             
             env.move(action, G=None)
 
-            if action >= 5: # or action == 6:
+            if action >= 5: #on betting
                 continue
             if action == 4: 
                 done = True
@@ -57,22 +49,23 @@ def main():
             
             has_split = env.state.second_hand_active 
             
-            if env.checkend:
+            if env.checkend: #check if game ended
                 check_end_status = env.CheckEnd()
                 if check_end_status == 0:
                     continue
                 
                 done = True
                 
-                if epoch % 500 == 0:
+                if epoch % 500 == 0: #uppate balance graph
                     balance_checkpoints.append(env.state.balance)
                     epoch_checkpoints.append(epoch)
                 
-                if check_end_status in [1, 4, 5, 6, 8]:
+                if check_end_status in [1, 4, 5, 6, 8]: #update win counters
                     test_win += 1
                     if check_end_status == 1 and has_split:
                         test_win += 1
                 
+    #print the results
     final_test_rate = (test_win / (test_epoches + extra_hands)) * 100
     print(f"Test Win Rate: {final_test_rate}%")
     print(f"Test Balance: {env.state.balance}")
@@ -80,19 +73,24 @@ def main():
 
 
 def plot_simulation_results(episodes, balances):
+    '''
+    create a graph for the balance over time(epoches)
+    '''
+    
     plt.figure(figsize=(12, 6))
     plt.plot(episodes, balances, label='AI Bankroll', color='blue', linewidth=1.5)
     
-    # הוספת קו התחלה (Baseline) ב-10,000
+    # Added the baseline comparison in 10,000 in red
     plt.axhline(y=10000, color='red', linestyle='--', label='Starting Capital')
     
+    # The graph details
     plt.title('Blackjack AI Performance - 100,000 Hands', fontsize=14)
     plt.xlabel('Number of Hands', fontsize=12)
     plt.ylabel('Balance ($)', fontsize=12)
     plt.grid(True, alpha=0.3)
     plt.legend()
     
-    # סימון נקודת הסיום
+    # The endpoint
     plt.annotate(f'Final: ${balances[-1]}', 
                  xy=(episodes[-1], balances[-1]), 
                  xytext=(episodes[-1]-10000, balances[-1]+1000),

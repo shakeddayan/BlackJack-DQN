@@ -30,6 +30,10 @@ class State:
         self.round_phase = 'betting'
 
     def get_state(self): #(28,1) - [round phase, balance, first bet, second bet, dealer card, which hand is active, ---main hand---, ---secondary hand---]
+        '''
+        the original state i thought about using. after splitting the models, this went unused.
+        '''
+        
         # add round phase as 0 or 1
         phase = 1 if self.round_phase == 'playing' else 0
         st = [phase, self.balance, self.bet_val, self.bet2_val, self.d_card, self.second_hand_active] #add all single digit data
@@ -44,7 +48,10 @@ class State:
         
         return torch.Tensor(st)
     
-    def get_state_AI(self):
+    def get_state_min(self): 
+        '''
+        get the min model's state: [p_sum, hasAce, d_card]
+        '''
         if self.second_hand_active:
             st = [self.get_p2_sum() / 21, 1 if 11 in self.p2_hand_vals else 0, self.d_card/11]
         else:
@@ -52,6 +59,11 @@ class State:
         return torch.Tensor(st)
     
     def get_state_split(self):
+        '''
+        get the split model's state: [p_card, d_card]
+        p_card is the card that is duplicated.
+        '''
+        
         if self.second_hand_active:
             st = [self.p2_hand_vals[1] / 11, self.d_card/11]
         else:
@@ -60,6 +72,11 @@ class State:
     
 
     def __str__(self):
+        '''
+        this functions returns a string that describes the current state.
+        used for debugging, especially in files that didn't make it to the final project.
+        '''
+        
         return f''' BALANCE:{self.balance}
             BET1: {self.bet_val}
             BET2: {self.bet2_val}
@@ -70,7 +87,7 @@ class State:
             dealer: {self.d_card}
         '''
 
-    def get_bet(self, val):
+    def set_bet(self, val):
         '''
         sets both bets to a given value
         '''
@@ -81,6 +98,7 @@ class State:
         '''
         Gets the sum of the player's main / first hand.
         Automatically handles aces being 11 or 1.
+        if has multiple aces, and some are 1 and others are 11, the ones that appear first are 1 and others are 11.
         '''
 
         # First, convert all aces (if they were 1s) to 11
@@ -105,6 +123,7 @@ class State:
         '''
         gets the sum of the player's secondary hand
         Automatically handles aces being 11 or 1.
+        if has multiple aces, and some are 1 and others are 11, the ones that appear first are 1 and others are 11.
         '''
 
         # First, convert all aces (if they were 1s) to 11

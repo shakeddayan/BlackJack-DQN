@@ -60,18 +60,6 @@ def main():
     # --- PRINTING THE RESULTS AS TABLES ---
     # ==========================================
 
-    # def print_row(label, actions):
-    #     # Helper to format each row nicely
-    #     formatted_actions = "   ".join([str(a).rjust(2) for a in actions])
-    #     print(f"{str(label).ljust(10)} | {formatted_actions}")
-
-    # print("\n" + "="*50)
-    # print(" HARD HANDS - NO PAIRS ")
-    # print("="*50)
-    # print("Player Sum | Dlr: 2    3    4    5    6    7    8    9   10   11")
-    # print("-" * 55)
-    # for idx, actions in enumerate(hard_hands_no_pairs):
-    #     print_row(idx + 5, actions)
     
     #write to the output csv file.
     with open(f"startegies/strat_min{MIN_MODEL_NUM}_split{SPLIT_MODEL_NUMS[0]}.csv", "w") as f:
@@ -106,34 +94,6 @@ def main():
         f.write("BlackJack (21):," + ",".join(map(str, bj))+ "\n") #fill in the values of the testing
         #a few breaks between tables
         f.write("\n\n\n")
-
-
-    # print("\n" + "="*50)
-    # print(" SOFT HANDS - NO PAIRS ")
-    # print("="*50)
-    # print("Player Sum | Dlr: 2    3    4    5    6    7    8    9   10   11")
-    # print("-" * 55)
-    # for idx, actions in enumerate(soft_hands_no_pairs):
-    #     print_row(idx + 13, actions)
-
-    # print("\n" + "="*50)
-    # print(" PAIRS ")
-    # print("="*50)
-    # # Note: the pairs dealer loop goes from 1 to 10
-    # print("Pair Card  | Dlr: 2    3    4    5    6    7    8    9   10   11") 
-    # print("-" * 60)
-    # for idx, actions in enumerate(pairs):
-    #     # i starts at 2 and steps by 2 (2, 4, 6, 8, 10)
-    #     pair_val = 2 + (idx) 
-    #     print_row(pair_val, actions)
-
-    # print("\n" + "="*50)
-    # print(" BLACKJACKS ")
-    # print("="*50)
-    # print("Player Sum | Dlr: 2    3    4    5    6    7    8    9   10   11")
-    # print("-" * 55)
-    # print_row("BJ (21)", bj)
-    # print("\n")
 
 
 #run the main game loop

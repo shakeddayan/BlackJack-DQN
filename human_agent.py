@@ -19,10 +19,11 @@ class Human_Agent:
         3 - stand
         4 - surrender
         5 - bet 0
-        6 - bet 1/4
-        7 - bet 1/2
-        8 - bet 3/4
-        9 - bet all in (all of the balance)
+        6 - bet 10%
+        7 - bet 20%
+        ...
+        15 - bet all in (100%)
+        16 - bet 10$ (used only by AI)
         '''
         
         if env.state.round_phase == 'betting':

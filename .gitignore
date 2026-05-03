@@ -18,3 +18,4 @@ text.txt
 TODO
 Trainer_DDQN_min_old.py
 TrainerDDQN.py
+play_no_graphics.py

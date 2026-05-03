@@ -18,7 +18,7 @@ class DQN_Agent:
 
     def get_Action (self, env:Env, epoch = 0, events= None, train = False):
         action = None
-        if train == False: #handle train == true later if needed.
+        if train == False:
             if env.state.round_phase == 'playing':
                 split_legal = env.is_action_legal(2)
                 if split_legal: #if can split.
@@ -28,7 +28,7 @@ class DQN_Agent:
                         action = 2
                 
                 if action != 2:
-                    min_state = env.state.get_state_AI() #needs a different format
+                    min_state = env.state.get_state_min() #min agent needs a different format
                     action = self.min_agent.get_Action(min_state, has_split=env.splitted, train=False)
             else:
                 action = 16 #always bet 2%

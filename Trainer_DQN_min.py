@@ -129,7 +129,7 @@ def main():
         while not done:
             
             # S
-            curr_state = env.state.get_state_AI() 
+            curr_state = env.state.get_state_min() 
             
             # A
             action = player.get_Action(curr_state, epoch,start_epoch= start_epoch) if env.state.round_phase == 'playing' else 5 if epoch < epoches - 50000 else 6 
@@ -141,7 +141,7 @@ def main():
             env.move(action, G=None)
             if action == 5 or action == 6:
                 continue
-            new_state = env.state.get_state_AI() 
+            new_state = env.state.get_state_min() 
 
             # R
             reward = 0
@@ -338,7 +338,7 @@ def main():
             
         done = False
         while not done:
-            curr_state = env.state.get_state_AI()
+            curr_state = env.state.get_state_min()
             
             if env.state.round_phase == 'playing':
                 action = player.get_Action(curr_state, epoch, train=False)

@@ -167,7 +167,7 @@ def main():
                 reward += action_specific_reward(decision, pair_val, d_card)
                 
             if action != 2: #else use min model selection if can't/didn't split (action will be None).
-                min_state = env.state.get_state_AI() #needs a different format
+                min_state = env.state.get_state_min() #needs a different format
                 action = player.get_Action(min_state,has_split=env.splitted, epoch=epoch, start_epoch=start_epoch,train=False) if env.state.round_phase == 'playing' else 5 if epoch < epoches - 50000 else 6 
             
             env.move(action, G=None)
@@ -317,7 +317,7 @@ def main():
                         extra_hands += 1
                 
                 if action != 2:
-                    min_state = env.state.get_state_AI() #needs a different format
+                    min_state = env.state.get_state_min() #needs a different format
                     action = player.get_Action(min_state, epoch, train=False)
             else:
                 action = 6 
