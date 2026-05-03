@@ -60,7 +60,7 @@ DQN_Agent_min: 14
 Split_Agent: 11 (for min model 14)
 
 ## 🖼️​ Game Screenshots
-![A game screenshot](img\screenshot.png)
+![A game screenshot](img/screenshot.png)
 
 ---
 *Developed as part of a deep dive into Reinforcement Learning and Computer Science.*
