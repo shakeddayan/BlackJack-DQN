@@ -7,6 +7,25 @@ import winsound
 import time
 import wandb 
 
+
+
+
+
+
+
+#################################
+#THE OLD MIN MODEL TRAINER
+######################################
+
+
+
+
+
+
+
+
+
+
 # Global flag to terminate the game loop
 terminate_game = False
 

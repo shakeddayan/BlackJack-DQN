@@ -33,8 +33,8 @@ class Env:
         self.checkend = False #if need to check end in the main loop.
         self.state = State(balance) # holds the game state.
         self.state.round_phase = 'betting' #will hold the round phase: betting / playing, and will help lock buttons accordingly
-        self.d_hand_vals = np.zeros(11, dtype=np.int32)
-        self.splitted = False
+        self.d_hand_vals = np.zeros(11, dtype=np.int32) # the dealer's full hand.
+        self.splitted = False #has the player splitted
         self.state.set_bet(G.bet.get_value() if G != None else 0) #store the bet value in the state
     
     # def render_graphics(self, G:Graphics):
@@ -287,12 +287,12 @@ class Env:
         '''
         if not self.splitted or (self.splitted and not self.state.second_hand_active):
             # self.state.bet_val =  int(self.state.balance * ((bet_action - 5)/10 if bet_action != 16 else 0.01)) #G.bet.get_value() if G != None else
-            self.state.bet_val =  int(self.state.balance * (bet_action - 5)/10 if bet_action != 16 else 10) #G.bet.get_value() if G != None else
+            self.state.bet_val =  int(self.state.balance * (bet_action - 5)/10 if bet_action != 16 else min(10, self.state.balance)) #G.bet.get_value() if G != None else
             if G != None:
                 G.bet.set_value(self.state.bet_val)
         else:
             # self.state.bet2_val = int(self.state.balance * ((bet_action - 5)/10 if bet_action != 16 else 0.01)) #G.bet.get_value() if G != None else 
-            self.state.bet2_val = int(self.state.balance * (bet_action - 5)/10 if bet_action != 16 else 10) #G.bet.get_value() if G != None else 
+            self.state.bet2_val = int(self.state.balance * (bet_action - 5)/10 if bet_action != 16 else min(10, self.state.balance)) #G.bet.get_value() if G != None else 
             if G != None:
                 G.bet.set_value(self.state.bet2_val)
         self.state.round_phase = 'playing'

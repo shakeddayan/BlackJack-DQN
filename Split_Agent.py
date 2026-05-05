@@ -39,5 +39,8 @@ class Split_Agent: #THE SPLIT MODEL
     def save_param (self, path): #save a new model
         self.DQN.save_params(path)
     
+    def load_params (self, path):
+        self.DQN.load_params(path)
+    
     def __call__(self, events=None, state=None):
         return self.get_Action(state)
