@@ -19,3 +19,5 @@ TODO
 Trainer_DDQN_min_old.py
 TrainerDDQN.py
 play_no_graphics.py
+Split_Trainer_Old.py
+Trainer_DQN_min.py
