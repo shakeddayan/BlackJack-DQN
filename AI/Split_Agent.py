@@ -1,5 +1,5 @@
 import torch
-from DQN import DQN
+from AI.DQN import DQN
 import random
 import math
 

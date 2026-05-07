@@ -1,10 +1,10 @@
 import copy
 import torch
 import threading
-from Split_Agent import Split_Agent
+from AI.Split_Agent import Split_Agent
 from env import Env
-from DQN_Agent_min import DQN_Agent_min
-from ReplayBuffer import ReplayBuffer
+from AI.DQN_Agent_min import DQN_Agent_min
+from AI.ReplayBuffer import ReplayBuffer
 import wandb 
 
 '''

@@ -2,9 +2,9 @@
 import torch
 import random
 import math
-from DQN import DQN
-from DQN_Agent_min import DQN_Agent_min
-from Split_Agent import Split_Agent
+from AI.DQN import DQN
+from AI.DQN_Agent_min import DQN_Agent_min
+from AI.Split_Agent import Split_Agent
 from env import Env
 
 

@@ -2,7 +2,7 @@
 import torch
 import random
 import math
-from DQN import DQN
+from AI.DQN import DQN
 
 
 epsilon_start, epsilon_final, epsilon_decay = 1, 0.01, 200000

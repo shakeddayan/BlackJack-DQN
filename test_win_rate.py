@@ -1,14 +1,14 @@
 from env import Env
 from random_agent import Random_Agent
-from DQN_Agent import DQN_Agent
+from AI.DQN_Agent import DQN_Agent
 import matplotlib.pyplot as plt
 
 
 def main():
     print("\n--- STARTING TEST PHASE ---")
 
-    min_parametes_path = 'checkpoints/BlackJack-min-run-16.pth'
-    split_parametes_path='checkpoints-split/BlackJack-split-run-13 (min model number 16).pth'
+    min_parametes_path = 'checkpoints/BlackJack-min-run-14.pth'
+    split_parametes_path='checkpoints-split/BlackJack-split-run-11 (min model number 14).pth'
     agent = DQN_Agent(min_parametes_path, split_parametes_path, train=False)
     # agent = Random_Agent()
     # agent = DQN_Agent()

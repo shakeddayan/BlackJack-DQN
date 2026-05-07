@@ -3,8 +3,8 @@ from graphics import Graphics
 from env import Env
 from human_agent import Human_Agent
 from random_agent import Random_Agent
-from DQN_Agent_min import DQN_Agent_min
-from DQN_Agent import DQN_Agent
+from AI.DQN_Agent_min import DQN_Agent_min
+from AI.DQN_Agent import DQN_Agent
 
 
 clock = pygame.time.Clock()
@@ -19,7 +19,7 @@ def main(agent_type="human"):
     pygame.init()
 
     #RUN VARIABLES
-    FORCE_SPLIT = False
+    FORCE_SPLIT = True
     run = True
     balance = 10000
     graphics = Graphics(balance)

@@ -1,9 +1,9 @@
 import torch
 from human_agent import Human_Agent
 from random_agent import Random_Agent
-from DQN_Agent_min import DQN_Agent_min
-from DQN_Agent import DQN_Agent
-from Split_Agent import Split_Agent
+from AI.DQN_Agent_min import DQN_Agent_min
+from AI.DQN_Agent import DQN_Agent
+from AI.Split_Agent import Split_Agent
 
 
 

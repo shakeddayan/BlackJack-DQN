@@ -1,8 +1,8 @@
 import torch
 import threading
 from env import Env
-from DQN_Agent_min import DQN_Agent_min
-from ReplayBuffer import ReplayBuffer
+from AI.DQN_Agent_min import DQN_Agent_min
+from AI.ReplayBuffer import ReplayBuffer
 import winsound
 import time
 import wandb 
